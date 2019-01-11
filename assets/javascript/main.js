@@ -82,7 +82,6 @@ $(document).ready(function () {
         console.log(typeof position.coords.latitude);
         console.log(mymap);
         mymap = L.map('mapid').setView([lat, lng], 13);
-        $("#mapid").css({ "border": "4px inset white" });
         console.log(mymap);
         L.tileLayer('https://api.mapbox.com/styles/v1/mochacosine1206/cjq2cj6sx2l172rl7r4l5nkp1/tiles/256/{z}/{x}/{y}?access_token={accessToken}', {
             attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -364,7 +363,7 @@ $(document).ready(function () {
 
 
         function moreRestaurants() {
-            var moreButton = $("<button>").addClass("yellow darken-2 waves-effect waves-light btn").attr("id", "moreResults").text("Show More");
+            var moreButton = $("<button>").addClass("red darken-2 waves-effect waves-light btn").attr("id", "moreResults").text("Show More");
             $("#formList").append(moreButton);
 
             $("#moreResults").on("click", function () {
