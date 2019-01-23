@@ -33,6 +33,7 @@ var currentCondition;
 
 
 $(document).ready(function () {
+    getLocation();
     $("#addressButton").on("click", function (event) {
         event.preventDefault();
 
@@ -41,11 +42,11 @@ $(document).ready(function () {
     });
 
 
-    $("#locationButton").on("click", function (event) {
-        event.preventDefault();
-        clearField()
-        getLocation();
-    });
+    // $("#locationButton").on("click", function (event) {
+    //     event.preventDefault();
+    //     clearField()
+    //     getLocation();
+    // });
 
 
     function clearField() {
@@ -91,8 +92,11 @@ $(document).ready(function () {
         }).addTo(mymap);
         var marker = L.marker([lat, lng]).addTo(mymap);
 
+
+
+
         geoAddress();
-        getZamatoCats();
+        // getZamatoCats();
         getZamato();
     }
 
@@ -186,19 +190,19 @@ $(document).ready(function () {
             console.log(formattedCityStateName);
         }
 
-        // if (city === undefined) {
-        //     formattedCityStateName = town + ",_" + state;
-        // } else if (town === undefined){
-        //     formattedCityStateName = hamlet + ",_" + state;
-        // } else if (hamlet === undefined) {
-        //     formattedCityStateName = residential + ",_" + state;
-        // } else if (residential === undefined){
-        //     formattedCityStateName = county + ",_" + state;
-        // } else if (county === undefined) {
-        //     formattedCityStateName = state;
-        // } else {
-        //     formattedCityStateName = city + ",_" + state;
-        // }
+        if (city === undefined) {
+            formattedCityStateName = town + ",_" + state;
+        } else if (town === undefined){
+            formattedCityStateName = hamlet + ",_" + state;
+        } else if (hamlet === undefined) {
+            formattedCityStateName = residential + ",_" + state;
+        } else if (residential === undefined){
+            formattedCityStateName = county + ",_" + state;
+        } else if (county === undefined) {
+            formattedCityStateName = state;
+        } else {
+            formattedCityStateName = city + ",_" + state;
+        }
 
         console.log(formattedCityStateName);
 
@@ -290,9 +294,27 @@ $(document).ready(function () {
             }).addTo(mymap);
             var marker = L.marker([lat, lng]).addTo(mymap);
 
+            var info = L.control();
+
+            info.onAdd = function (mymap) {
+                var container = L.DomUtil.create('div', 'search-container');
+                this.form = L.DomUtil.create('form', 'form', container);
+                var group = L.DomUtil.create('div', 'form-group', this.form);
+                this.input = L.DomUtil.create('input', 'form-control input-sm', group);
+                this.input.type = 'text';
+                this.input.placeholder = this.options.placeholder;
+                this.results = L.DomUtil.create('div', 'list-group', group);
+                L.DomEvent.addListener(this.input, 'keyup', _.debounce(this.keyup, 300), this);
+                L.DomEvent.addListener(this.form, 'submit', this.submit, this);
+                L.DomEvent.disableClickPropagation(container);
+                return container;
+            };
+
+            info.addTo(mymap);
+
             $("#locText").html("Latitude: " + response[0].lat + " <br> Longitude: " + response[0].lon + " <br> Street Address: " + response[0].display_name);
             geoAddress();
-            getZamatoCats();
+            // getZamatoCats();
             getZamato();
         }
     }
